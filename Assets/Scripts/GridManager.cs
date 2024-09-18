@@ -69,7 +69,7 @@ public class GridManager : MonoBehaviour
 
         // Adjust gridParent's position so that it's centered within the camera
         gridParent.localPosition = new Vector3(-gridCenterX, gridCenterY, 0);
-        mainCamera.orthographicSize = mainCamera.orthographicSize+1;
+        mainCamera.orthographicSize = mainCamera.orthographicSize+2;
     }
 
 

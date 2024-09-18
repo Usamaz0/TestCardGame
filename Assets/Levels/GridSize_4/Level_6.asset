@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c4a27ab8b81d3d7458093b31789b1100, type: 3}
   m_Name: Level_6
   m_EditorClassIdentifier: 
-  gridRowCount: 3
+  gridRowCount: 4
   gridColumnCount: 4

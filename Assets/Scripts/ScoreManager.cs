@@ -9,19 +9,28 @@ public class ScoreManager : MonoBehaviour
     int turns;
     int matches;
     int score;
+    int accuracy;
+    int combo =1;
     public event Action onTurnUpdated;
     public event Action onMatchesUpdated;
 
-    public TextMeshProUGUI turnText,matchText,scoreText; // Reference to a UI Text component for displaying the score
+    public TextMeshProUGUI turnText,matchText,scoreText, accuracyText, comboText; // Reference to a UI Text component for displaying the score
     private void Start()
     {
         cardMatchCheck.onTurnUpdated +=  IncreaseTurns;
         cardMatchCheck.onCardMatahed += IncreaseMatches;
+        cardMatchCheck.onCardMatahed += IncreaseScore;
+        cardMatchCheck.onCardMatahed += IncreaseCombo;
+        cardMatchCheck.onCardMismatahed += ResetCombo;
+        UpdateScoreUI();
     }
     private void OnDisable()
     {
         cardMatchCheck.onTurnUpdated -= IncreaseTurns;
         cardMatchCheck.onCardMatahed -= IncreaseMatches;
+        cardMatchCheck.onCardMatahed -= IncreaseScore;
+        cardMatchCheck.onCardMatahed -= IncreaseCombo;
+        cardMatchCheck.onCardMismatahed -= ResetCombo;
     }
     void IncreaseTurns()
     {
@@ -35,19 +44,31 @@ public class ScoreManager : MonoBehaviour
         onMatchesUpdated?.Invoke();
         UpdateScoreUI();
     }
-    public int GetTurns()
+    void IncreaseScore()
     {
-        return turns;
+        score += (10*combo);
+        UpdateScoreUI();
     }
-    public int GetMatches()
+    void IncreaseCombo()
     {
-        return matches;
+        combo++;
+        UpdateScoreUI();
     }
-    public int GetScore()
+    void ResetCombo()
     {
-        if(turns == 0) return 0;
-        return (int)(matches * 100) / turns;
+        combo = 1;
+        UpdateScoreUI();
     }
+    int GetTurns()
+    {
+        return turns/2;
+    }
+    int GetAccuracy()
+    {
+        if(GetTurns() == 0) return 0;
+        return (int)(matches * 100) / GetTurns();
+    }
+
     public void UpdateScoreUI()
     {
         // Update the score displayed on the UI
@@ -57,11 +78,19 @@ public class ScoreManager : MonoBehaviour
         }
         if (matchText != null)
         {
-            matchText.text = "Match: " + GetMatches(); // Assuming GetScore() method exists in CardMatchHandler
+            matchText.text = "Match: " + matches; // Assuming GetScore() method exists in CardMatchHandler
         }
         if (scoreText != null)
         {
-            scoreText.text = "Score: " + GetScore(); // Assuming GetScore() method exists in CardMatchHandler
+            scoreText.text = "Score: " + score; // Assuming GetScore() method exists in CardMatchHandler
         }
+        if (accuracyText != null)
+        {
+            accuracyText.text = "Accuracy: " + GetAccuracy() +"%"; // Assuming GetScore() method exists in CardMatchHandler
+        }
+        if(comboText != null)
+        {
+            comboText.text = "Combo: " + combo;
+        }    
     }
 }

@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class LevelContainer : MonoBehaviour
 {
-  
-    [SerializeField] private LevelInfo[] veryEasylevelsInfo, easyLevelsInfo, mediumLevelsInfo,
+
+    [SerializeField]
+    private LevelInfo[] veryEasylevelsInfo, easyLevelsInfo, mediumLevelsInfo,
         hardLevelsInfo, veryHardLevelsInfo;
 
-    public int currentMode;
+
     private void Awake()
     {
-        currentMode = GetModeType();
         if (GetCurrentLevel() >= GetTotalLevelsInMode())
         {
             GameSaveLoad.SetCurrentLevel(GetModeType(), 0);

@@ -49,19 +49,19 @@ public class CardMatchHandler : MonoBehaviour, ICardMatchHandler
             _matchedPairs++;
             foreach (Card card in _flippedCards)
             {
-                onCardMatahed?.Invoke();
                 card.MatchFound(); // Notify each card of a successful match
-                HandleCardMatch();
             }
+            HandleCardMatch();
+            onCardMatahed?.Invoke();
         }
         else
         {
             foreach (Card card in _flippedCards)
             {
-                onCardMismatahed?.Invoke();
                 card.ResetCard(); // Reset cards that did not match
-                HandleCardMismatch();
             }
+            HandleCardMismatch();
+            onCardMismatahed?.Invoke();
         }
 
         _flippedCards.Clear();

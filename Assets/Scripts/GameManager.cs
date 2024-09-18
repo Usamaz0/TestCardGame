@@ -1,34 +1,35 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    public static GameManager Instance;
     public GridManager gridManager; // Reference to the GridManager
     public GameObject gameCompletePanel; // Panel to display when the game is complete
-
+    [SerializeField]
     private CardMatchHandler _cardMatchHandler;
+    [SerializeField]
+    private LevelContainer _levelContainer;
 
-    private void Awake()
+    private void OnEnable()
     {
-        Instance = this;
+        _cardMatchHandler.onLevelComplete += OnGameComplete;
+    }
+    private void OnDisable()
+    {
+        _cardMatchHandler.onLevelComplete -= OnGameComplete;
     }
     private void Start()
     {
-        _cardMatchHandler = gridManager.GetComponent<CardMatchHandler>();
+        Application.targetFrameRate = 60;
 
         if (_cardMatchHandler == null)
         {
             Debug.LogError("CardMatchHandler component is missing from GridManager!");
             return;
         }
-
-        _cardMatchHandler.SetTotalPairs(gridManager.rows * gridManager.cols / 2); // Initialize total pairs
-
         // Initialize UI
         gameCompletePanel.SetActive(false); // Hide the game complete panel initially
     }
-
-   
 
     public void OnGameComplete()
     {
@@ -37,5 +38,18 @@ public class GameManager : MonoBehaviour
         {
             gameCompletePanel.SetActive(true);
         }
+    }
+    public void PlayerNextLevel()
+    {
+        _levelContainer.IncreaseLevel();
+        LoadScene();
+    }
+    public void RestartLevel()
+    {
+        LoadScene();
+    }
+    void LoadScene()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }

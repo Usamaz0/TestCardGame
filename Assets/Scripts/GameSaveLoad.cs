@@ -1,17 +1,18 @@
 using UnityEngine;
 
-public class GameSaveLoad : MonoBehaviour
+public static class GameSaveLoad
 {
-    private const string ScoreKey = "Score";
-
-    public void SaveGame(int score)
+    public static int modeType
     {
-        PlayerPrefs.SetInt(ScoreKey, score);
-        PlayerPrefs.Save();
+        get { return PlayerPrefs.GetInt("modeType", 0); }
+        set { PlayerPrefs.SetInt("modeType", value); }
     }
-
-    public int LoadGame()
+    public static int GetCurrentLevel(int modeType)
     {
-        return PlayerPrefs.GetInt(ScoreKey, 0);
+        return PlayerPrefs.GetInt("currentLevel" + modeType, 0);
+    }
+    public static void SetCurrentLevel(int modeType,int value)
+    {
+        PlayerPrefs.SetInt("currentLevel" + modeType, value); 
     }
 }

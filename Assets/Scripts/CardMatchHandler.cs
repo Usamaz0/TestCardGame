@@ -13,6 +13,7 @@ public class CardMatchHandler : MonoBehaviour, ICardMatchHandler
     public event Action onTurnUpdated;
     public event Action onCardMatahed;
     public event Action onCardMismatahed;
+    public event Action onLevelComplete;
 
     public AudioClip cardClickSound;
     public AudioClip cardMatchSound;
@@ -73,7 +74,7 @@ public class CardMatchHandler : MonoBehaviour, ICardMatchHandler
     {
         if (_matchedPairs >= _totalPairs)
         {
-            GameManager.Instance.OnGameComplete(); // Ensure GameManager is a singleton or adjust as necessary
+            onLevelComplete?.Invoke();
             HandleGameComplete();
         }
     }

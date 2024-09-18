@@ -3,34 +3,44 @@ using UnityEngine;
 
 public class GridManager : MonoBehaviour
 {
-    public GameObject cardPrefab; // Prefab for the card
-    public Transform gridParent; // Parent object where cards will be instantiated
-    public int rows = 2;
-    public int cols = 2;
-    public float xSpacing = 1.5f; // Horizontal spacing between cards
-    public float ySpacing = 1.5f; // Vertical spacing between cards
-    public Camera mainCamera; // Reference to the main camera
+    [SerializeField] private GameObject cardPrefab; // Prefab for the card
+    [SerializeField] private Transform gridParent; // Parent object where cards will be instantiated
 
-    
+    [SerializeField] private float xSpacing = 1.5f; // Horizontal spacing between cards
+    [SerializeField] private float ySpacing = 1.5f; // Vertical spacing between cards
+    [SerializeField] private Camera mainCamera; // Reference to the main camera
+
+    [SerializeField]
     private CardMatchHandler _cardMatchHandler;
+    [SerializeField]
+    private LevelContainer levelContainer;
 
+    private int rows = 2;
+    private int cols = 2;
+    private void Awake()
+    {
+        rows = levelContainer.GetLevelGridRowCount();
+        cols = levelContainer.GetLevelGridColumnCount();
+    }
     private void Start()
     {
-        _cardMatchHandler = GetComponent<CardMatchHandler>();
         if (_cardMatchHandler == null)
         {
             Debug.LogError("CardMatchHandler component is missing from the GridManager!");
             return;
         }
+        _cardMatchHandler.SetTotalPairs(GetTotalPairs()); // Initialize total pairs
 
-       
 
         int totalPairs = GenerateGrid();
         _cardMatchHandler.SetTotalPairs(totalPairs / 2); // Set total pairs in the match handler
 
         AdjustGridToFitCamera(); // Adjust the grid to fit the camera view
     }
-
+    public int GetTotalPairs()
+    {
+        return ((rows * cols) / 2);
+    }
     // Method to adjust the grid to fit within the camera view and center it
     private void AdjustGridToFitCamera()
     {

@@ -3,8 +3,10 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    public GridManager gridManager; // Reference to the GridManager
-    public GameObject gameCompletePanel; // Panel to display when the game is complete
+    [SerializeField] private AudioSource m_AudioSource;
+    [SerializeField] private int mainMenuSceneIndex =0;
+    [SerializeField] private GridManager gridManager; // Reference to the GridManager
+    [SerializeField] private GameObject gameCompletePanel; // Panel to display when the game is complete
     [SerializeField]
     private CardMatchHandler _cardMatchHandler;
     [SerializeField]
@@ -42,14 +44,20 @@ public class GameManager : MonoBehaviour
     public void PlayerNextLevel()
     {
         _levelContainer.IncreaseLevel();
-        LoadScene();
+        LoadGameplayScene();
     }
     public void RestartLevel()
     {
-        LoadScene();
+        LoadGameplayScene();
     }
-    void LoadScene()
+    void LoadGameplayScene()
     {
+        m_AudioSource.Play();
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+    public void LoadMainMenuScene()
+    {
+        m_AudioSource.Play();
+        SceneManager.LoadScene(mainMenuSceneIndex);
     }
 }

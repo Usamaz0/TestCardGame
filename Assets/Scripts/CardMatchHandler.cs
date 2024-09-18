@@ -6,7 +6,6 @@ using System;
 public class CardMatchHandler : MonoBehaviour, ICardMatchHandler
 {
     private List<Card> _flippedCards = new List<Card>();
-    private int _score = 0;
     private int _matchedPairs = 0;
     private int _totalPairs;
 
@@ -47,7 +46,6 @@ public class CardMatchHandler : MonoBehaviour, ICardMatchHandler
 
         if (_flippedCards[0].CardID == _flippedCards[1].CardID)
         {
-            _score += 10; // Example score increment
             _matchedPairs++;
             foreach (Card card in _flippedCards)
             {
@@ -82,11 +80,6 @@ public class CardMatchHandler : MonoBehaviour, ICardMatchHandler
     public void SetTotalPairs(int totalPairs)
     {
         _totalPairs = totalPairs;
-    }
-
-    public int GetScore()
-    {
-        return _score;
     }
     private void HandleCardClick()
     {

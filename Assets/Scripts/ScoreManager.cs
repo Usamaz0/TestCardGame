@@ -18,7 +18,11 @@ public class ScoreManager : MonoBehaviour
         cardMatchCheck.onTurnUpdated +=  IncreaseTurns;
         cardMatchCheck.onCardMatahed += IncreaseMatches;
     }
-
+    private void OnDisable()
+    {
+        cardMatchCheck.onTurnUpdated -= IncreaseTurns;
+        cardMatchCheck.onCardMatahed -= IncreaseMatches;
+    }
     void IncreaseTurns()
     {
         turns++;

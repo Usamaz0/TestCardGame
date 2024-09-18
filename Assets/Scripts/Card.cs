@@ -4,8 +4,7 @@ using System.Collections;
 public class Card : MonoBehaviour
 {
     public int CardID { get; private set; }
-    public Sprite[] cardSprites; // Array of sprites for different card types
-    public Sprite cardBackSprite; // Sprite for the card back
+    public CardsData cardsData;
     private SpriteRenderer cardRenderer; // Reference to the SpriteRenderer component
 
     private ICardMatchHandler _matchHandler;
@@ -22,20 +21,20 @@ public class Card : MonoBehaviour
             Debug.LogError("SpriteRenderer component is missing on the card prefab!");
         }
 
-        if (cardSprites == null || cardSprites.Length == 0)
+        if (cardsData.cardSprites == null || cardsData.cardSprites.Length == 0)
         {
             Debug.LogError("Card sprites not assigned in the Inspector!");
         }
 
         // Initialize with card back sprite
-        cardRenderer.sprite = cardBackSprite;
+        cardRenderer.sprite = cardsData.cardBackSprite;
     }
 
     public void Initialize(int id, ICardMatchHandler matchHandler)
     {
         CardID = id;
         _matchHandler = matchHandler;
-        cardRenderer.sprite = cardBackSprite;
+        cardRenderer.sprite = cardsData.cardBackSprite;
     }
 
     private void OnMouseDown()
@@ -51,7 +50,7 @@ public class Card : MonoBehaviour
         _isAnimating = true;
         _matchHandler.OnCardFilledAction();
         // Flip to front
-        yield return StartCoroutine(FlipCoroutine(Vector3.zero, Vector3.one, cardSprites[CardID]));
+        yield return StartCoroutine(FlipCoroutine(Vector3.zero, Vector3.one, cardsData.cardSprites[CardID]));
 
         // Notify the match handler
         yield return new WaitForSeconds(0.2f);
@@ -76,10 +75,10 @@ public class Card : MonoBehaviour
         // Ensure the card's scale and rotation are set correctly before starting the flip back
         transform.localScale = Vector3.one;
         transform.rotation = Quaternion.identity;
-        cardRenderer.sprite = cardBackSprite;
+        cardRenderer.sprite = cardsData.cardBackSprite;
 
         // Flip back to original state
-        yield return StartCoroutine(FlipCoroutine(Vector3.one, new Vector3(1,1,1), cardBackSprite));
+        yield return StartCoroutine(FlipCoroutine(Vector3.one, new Vector3(1,1,1), cardsData.cardBackSprite));
 
         _isFlipped = false;
         _isAnimating = false;

@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Collections;
+using System;
 
 public class CardMatchHandler : MonoBehaviour, ICardMatchHandler
 {
@@ -9,6 +10,9 @@ public class CardMatchHandler : MonoBehaviour, ICardMatchHandler
     private int _matchedPairs = 0;
     private int _totalPairs;
 
+    public event Action onTurnUpdated;
+    public event Action onCardMatahed;
+    public event Action onCardMismatahed;
 
     public AudioClip cardClickSound;
     public AudioClip cardMatchSound;
@@ -46,6 +50,7 @@ public class CardMatchHandler : MonoBehaviour, ICardMatchHandler
             _matchedPairs++;
             foreach (Card card in _flippedCards)
             {
+                onCardMatahed?.Invoke();
                 card.MatchFound(); // Notify each card of a successful match
                 HandleCardMatch();
             }
@@ -54,20 +59,14 @@ public class CardMatchHandler : MonoBehaviour, ICardMatchHandler
         {
             foreach (Card card in _flippedCards)
             {
+                onCardMismatahed?.Invoke();
                 card.ResetCard(); // Reset cards that did not match
                 HandleCardMismatch();
             }
         }
 
         _flippedCards.Clear();
-        UpdateScore();
         CheckGameCompletion();
-    }
-
-    private void UpdateScore()
-    {
-        // Notify the GameManager to update the UI
-        GameManager.Instance.UpdateScoreUI(); // Ensure GameManager is a singleton or adjust as necessary
     }
 
     private void CheckGameCompletion()
@@ -111,6 +110,7 @@ public class CardMatchHandler : MonoBehaviour, ICardMatchHandler
 
     public void OnCardFilledAction()
     {
+        onTurnUpdated?.Invoke();
         HandleCardClick();
     }
 }
